@@ -4,7 +4,7 @@ This plugin lets you add custom links in Elementor Image Carousel widget
 
 ## Description
 
-There is a WordPress limitation (no custom link on images) that make impossible to add custom links on each images in an image carousel or image gallery like the one in Elementor free version.
+There is a WordPress limitation (no custom link on images) that makes impossible to add custom links on each image in an image carousel or image gallery like the one in Elementor free version.
 
 This plugin just overrides WordPress attachment fields and Elementor Image Carousel widget to let you add custom links to each image in the carousel.
 Basically, it adds two custom fields to each image in WordPress Media Library (Custom link and "Open in new tab?" checkbox).
