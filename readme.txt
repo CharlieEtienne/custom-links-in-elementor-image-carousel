@@ -1,9 +1,9 @@
 === Custom links in Elementor Image Carousel ===
 Contributors: charlieetienne
 Tags: elementor, image carousel, custom links
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Requires at least: 5.2
-Tested up to: 5.8
+Tested up to: 5.9
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -22,6 +22,8 @@ Then it hooks into elementor image carousel widget just before it's rendered on 
 == Usage & Documentation ==
 
 No options, no premium version, no bullshit. Just activate or deactivate.
+
+**Note:** You have to enable the option “Link” in the Elementor Image Carousel widget and set it to: “Media Files” in order for it to work.
 
 = Resources =
 
@@ -46,3 +48,9 @@ Sure, go ahead! It is completely open source.
 == Screenshots ==
 
 1. Custom fields on images in Media Library
+
+== Changelog ==
+
+= 1.0.1 =
+ * Fixes "Open in new tab" option. It's now possible to uncheck this setting
+ * Improve docs

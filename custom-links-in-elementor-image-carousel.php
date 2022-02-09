@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Custom links in Elementor Image Carousel
  * Description:       Add custom links in Elementor Image Carousel widget
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Charlie Etienne
@@ -25,8 +25,8 @@ class CustomLinksEICW {
 	}
 
 	/**
-     *  Adds 'elementor_carousel_custom_link' field to attachment
-     *
+	 *  Adds 'elementor_carousel_custom_link' field to attachment
+	 *
 	 * @param $form_fields
 	 * @param $post
 	 *
@@ -55,26 +55,21 @@ class CustomLinksEICW {
 	}
 
 	/**
-     * Saves 'elementor_carousel_custom_link' field to attachment
-     *
+	 * Saves 'elementor_carousel_custom_link' field to attachment
+	 *
 	 * @param $post
 	 * @param $attachment
 	 *
 	 * @return WP_Post|array|null
 	 */
 	public function attachment_fields_to_save( $post, $attachment ) {
-		if ( isset( $attachment[ 'elementor_carousel_custom_link' ] ) ) {
-			update_post_meta(
-				$post[ 'ID' ],
-				'elementor_carousel_custom_link',
-				$attachment[ 'elementor_carousel_custom_link' ]
-			);
-		}
+		$attachment_link = $attachment[ 'elementor_carousel_custom_link' ];
+		$formated_link   = $attachment_link ?? '';
+		update_post_meta( $post[ 'ID' ], 'elementor_carousel_custom_link', $formated_link );
 
-		if ( isset( $attachment[ 'elementor_carousel_custom_link_target' ] ) ) {
-			$target = ( $attachment[ 'elementor_carousel_custom_link_target' ] == 'on' ) ? '1' : '0';
-			update_post_meta( $post[ 'ID' ], 'elementor_carousel_custom_link_target', $target );
-		}
+		$attachment_target = $attachment[ 'elementor_carousel_custom_link_target' ];
+		$formated_target   = isset( $attachment_target ) ? ( ( $attachment_target == 'on' ) ? '1' : '0' ) : 0;
+		update_post_meta( $post[ 'ID' ], 'elementor_carousel_custom_link_target', $formated_target );
 
 		return $post;
 	}
@@ -88,7 +83,7 @@ class CustomLinksEICW {
 	 * @param $widget
 	 *
 	 * @return mixed|void
-	 * @see \Elementor\Widget_Image_Carousel::render()
+	 * @see          \Elementor\Widget_Image_Carousel::render()
 	 * @noinspection DuplicatedCode
 	 */
 	public function widget_content( $content, $widget ) {
@@ -203,7 +198,7 @@ class CustomLinksEICW {
 	 *
 	 * @return string
 	 */
-	function get_link_target( $attachment ): string {
+	public function get_link_target( $attachment ): string {
 		$target = get_post_meta( $attachment[ 'id' ], 'elementor_carousel_custom_link_target' );
 		if ( isset( $target ) && is_array( $target ) && ! empty( $target[ 0 ] ) ) {
 			if ( $target[ 0 ] === '1' ) {
