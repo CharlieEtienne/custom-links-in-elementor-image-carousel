@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Custom links in Elementor Image Carousel
  * Description:       Add custom links in Elementor Image Carousel widget
- * Version:           1.0.1
+ * Version:           1.1.0
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Charlie Etienne
@@ -18,7 +18,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class CustomLinksEICW {
-	public function __construct() {
+
+	private static $instance;
+
+	final public static function get_instance(): CustomLinksEICW {
+		if (null === self::$instance) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
+	}
+
+	public function init() {
 		add_filter( 'attachment_fields_to_edit', [ $this, 'attachment_fields_to_edit' ], 10, 2 );
 		add_filter( 'attachment_fields_to_save', [ $this, 'attachment_fields_to_save' ], 10, 2 );
 		add_action( 'elementor/widget/render_content', [ $this, 'widget_content' ], 10, 2 );
@@ -272,7 +283,7 @@ class CustomLinksEICW {
 	}
 }
 
-new CustomLinksEICW();
+CustomLinksEICW::get_instance()->init();
 
 
 

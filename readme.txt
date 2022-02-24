@@ -1,7 +1,7 @@
 === Custom links in Elementor Image Carousel ===
 Contributors: charlieetienne
 Tags: elementor, image carousel, custom links
-Stable tag: 1.0.1
+Stable tag: 1.1.0
 Requires at least: 5.2
 Tested up to: 5.9
 Requires PHP: 7.2
@@ -50,6 +50,9 @@ Sure, go ahead! It is completely open source.
 1. Custom fields on images in Media Library
 
 == Changelog ==
+
+= 1.1.0 =
+ * Move to Singleton pattern to let other developpers unhook actions or filters
 
 = 1.0.1 =
  * Fixes "Open in new tab" option. It's now possible to uncheck this setting
