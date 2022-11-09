@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Custom links in Elementor Image Carousel
  * Description:       Add custom links in Elementor Image Carousel widget
- * Version:           1.1.0
+ * Version:           1.1.1
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Charlie Etienne
@@ -259,10 +259,10 @@ class CustomLinksEICW {
 	 * @param $attachment
 	 * @param $widget
 	 *
-	 * @return string
+	 * @return string|null
 	 * @see \Elementor\Widget_Image_Carousel::get_image_caption()
 	 */
-	public function get_image_caption( $attachment, $widget ): string {
+	public function get_image_caption( $attachment, $widget ) {
 		$caption_type = $widget->get_settings_for_display( 'caption_type' );
 
 		if ( empty( $caption_type ) ) {
