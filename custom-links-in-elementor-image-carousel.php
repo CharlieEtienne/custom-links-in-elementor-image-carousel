@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Custom links in Elementor Image Carousel
  * Description:       Add custom links in Elementor Image Carousel widget
- * Version:           1.2.0
+ * Version:           1.1.1
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Charlie Etienne
