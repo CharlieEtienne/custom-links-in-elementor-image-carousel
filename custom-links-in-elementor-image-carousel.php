@@ -100,6 +100,7 @@ class CustomLinksEICW {
 	public function widget_content( $content, $widget ) {
 		if ( 'image-carousel' === $widget->get_name() ) {
 			$settings = $widget->get_settings_for_display();
+            $lazyload = 'yes' === $settings['lazyload'];
 
 			if ( empty( $settings[ 'carousel' ] ) ) {
 				return;
@@ -114,14 +115,24 @@ class CustomLinksEICW {
 					$image_url = $attachment[ 'url' ];
 				}
 
-				$image_html = '<img class="swiper-slide-image" src="' . esc_attr( $image_url ) . '" alt="' . esc_attr( Elementor\Control_Media::get_image_alt( $attachment ) ) . '" />';
+                if ( $lazyload ) {
+				    $image_html = '<img class="swiper-slide-image swiper-lazy" data-src="' . esc_attr( $image_url ) . '" alt="' . esc_attr( Elementor\Control_Media::get_image_alt( $attachment ) ) . '" />';
+                } else {
+                    $image_html = '<img class="swiper-slide-image" src="' . esc_attr( $image_url ) . '" alt="' . esc_attr( Elementor\Control_Media::get_image_alt( $attachment ) ) . '" />';
+                }
 
-				$link_tag = '';
-
+                $link_tag = '';
+                
 				$link = $this->get_link_url( $attachment, $settings );
 
 				if ( $link ) {
 					$link_key = 'link_' . $index;
+                    
+                    if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
+                        $widget->add_render_attribute( $link_key, [
+                            'class' => 'elementor-clickable',
+                        ] );
+                    }
 
 					if ( $this->get_custom_link( $attachment ) ) {
 						$link_tag = '<a data-elementor-open-lightbox="no" href="' . $this->get_custom_link( $attachment ) . '" target="' . $this->get_link_target( $attachment ) . '">';
@@ -133,6 +144,10 @@ class CustomLinksEICW {
 				$image_caption = $this->get_image_caption( $attachment, $widget );
 
 				$slide_html = '<div class="swiper-slide">' . $link_tag . '<figure class="swiper-slide-inner">' . $image_html;
+
+                if ( $lazyload ) {
+                    $slide_html .= '<div class="swiper-lazy-preloader"></div>';
+                }
 
 				if ( ! empty( $image_caption ) ) {
 					$slide_html .= '<figcaption class="elementor-image-carousel-caption">' . wp_kses_post( $image_caption ) . '</figcaption>';
@@ -153,8 +168,22 @@ class CustomLinksEICW {
 				return;
 			}
 
+            $widget->add_render_attribute( [
+                'carousel' => [
+                    'class' => 'elementor-image-carousel swiper-wrapper',
+                ],
+                'carousel-wrapper' => [
+                    'class' => 'elementor-image-carousel-wrapper swiper-container',
+                    'dir' => $settings['direction'],
+                ],
+            ] );
+
 			$show_dots   = ( in_array( $settings[ 'navigation' ], [ 'dots', 'both' ] ) );
 			$show_arrows = ( in_array( $settings[ 'navigation' ], [ 'arrows', 'both' ] ) );
+
+            if ( 'yes' === $settings['image_stretch'] ) {
+                $widget->add_render_attribute( 'carousel', 'class', 'swiper-image-stretch' );
+            }
 
 			$slides_count = count( $settings[ 'carousel' ] );
 
@@ -170,11 +199,11 @@ class CustomLinksEICW {
 					<?php endif; ?>
 					<?php if ( $show_arrows ) : ?>
                         <div class="elementor-swiper-button elementor-swiper-button-prev">
-                            <i class="eicon-chevron-left" aria-hidden="true"></i>
+                            <?php $this->render_swiper_button( 'previous', $widget ); ?>
                             <span class="elementor-screen-only"><?php echo esc_html__( 'Previous', 'elementor' ); ?></span>
                         </div>
                         <div class="elementor-swiper-button elementor-swiper-button-next">
-                            <i class="eicon-chevron-right" aria-hidden="true"></i>
+                        <?php $this->render_swiper_button( 'next', $widget ); ?>
                             <span class="elementor-screen-only"><?php echo esc_html__( 'Next', 'elementor' ); ?></span>
                         </div>
 					<?php endif; ?>
@@ -186,7 +215,7 @@ class CustomLinksEICW {
 		}
 	}
 
-	/**
+/**
 	 * Get custom link for given attachment
 	 *
 	 * @param $attachment
@@ -281,9 +310,20 @@ class CustomLinksEICW {
 
 		return $attachment_post->post_content;
 	}
+
+    public function render_swiper_button( $type, $widget ) {
+		$direction = 'next' === $type ? 'right' : 'left';
+		$icon_settings = $widget->get_settings_for_display( 'navigation_' . $type . '_icon' );
+
+		if ( empty( $icon_settings['value'] ) ) {
+			$icon_settings = [
+				'library' => 'eicons',
+				'value' => 'eicon-chevron-' . $direction,
+			];
+		}
+
+		Elementor\Icons_Manager::render_icon( $icon_settings, [ 'aria-hidden' => 'true' ] );
+	}
 }
 
 CustomLinksEICW::get_instance()->init();
-
-
-
